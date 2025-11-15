@@ -1,0 +1,9 @@
+Flask
+flask-cors
+pandas
+langchain
+langchain-openai
+langchain-chroma
+openai
+chromadb
+python-dotenv
