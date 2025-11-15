@@ -2,8 +2,9 @@ flask
 flask-cors
 pandas
 datasets
-langchain
+langchain==0.0.350
 langchain-openai
 langchain-chroma
 openai
 chromadb
+gunicorn
