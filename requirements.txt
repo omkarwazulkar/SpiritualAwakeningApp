@@ -7,3 +7,4 @@ langchain-openai
 langchain-chroma
 openai
 chromadb
+gunicorn
