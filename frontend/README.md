@@ -1,1 +1,0 @@
-# spiritual_awakening_app
