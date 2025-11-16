@@ -1,11 +1,10 @@
-name: Build & Push Backend + Frontend To ECR
+name: Build & Push Frontend To ECR
 
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
-  Build-Push:
+  Build-Push-Frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,30 +22,6 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    # -----------------------------
-    # Backend Image Build & Push
-    # -----------------------------
-    - name: Build Docker Image (Backend)
-      run: |
-        docker build \
-          -f backend/Dockerfile \
-          -t ${{ secrets.ECR_REPOSITORY_BACKEND }}:latest \
-          ./backend
-
-    - name: Tag Backend Image
-      run: |
-        docker tag \
-          ${{ secrets.ECR_REPOSITORY_BACKEND }}:latest \
-          ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_BACKEND }}:latest
-
-    - name: Push Backend Image
-      run: |
-        docker push \
-          ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_BACKEND }}:latest
-
-    # -----------------------------
-    # Frontend Image Build & Push
-    # -----------------------------
     - name: Build Docker Image (Frontend)
       run: |
         docker build \
@@ -54,13 +29,13 @@ jobs:
           -t ${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest \
           ./frontend
 
-    - name: Tag Frontend Image
+    - name: Tag Image For ECR
       run: |
         docker tag \
           ${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest \
           ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest
 
-    - name: Push Frontend Image
+    - name: Push Docker Image To ECR
       run: |
         docker push \
           ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest

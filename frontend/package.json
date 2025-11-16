@@ -1,6 +1,7 @@
 {
   "name": "spiritual-awakening-project",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
