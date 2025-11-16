@@ -15,7 +15,7 @@ export default function Home() {
     setLoading(true);
     setResults(null);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/gita`, {
+      const response = await axios.post(`http://127.0.0.1:5000/api/gita`, {
         question,
       });
       setResults(response.data);

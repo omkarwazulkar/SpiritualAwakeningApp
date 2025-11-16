@@ -1,14 +1,19 @@
-from flask import Flask, request, jsonify # type: ignore
-from flask_cors import CORS # type: ignore
-from gita_pipeline import explainSelectedVerses, loadAndProcessGita, generateEmbeddings, retrieveRelevantDocs
 import os
+from vectorstore import generateEmbeddings
+from semantic_search import retrieveRelevantDocs
+from generation import explainSelectedVerses
+from flask import Flask, request, jsonify 
+from flask_cors import CORS
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
 
 # Load and prepare once
-gitaDf = loadAndProcessGita()
-vectorStore = generateEmbeddings(gitaDf)
+# gitaDf = loadAndProcessGita()
+INDEX_NAME = "gita-index"
+df = pd.read_csv(os.path.join("data", "structured_gita.csv"))
+vectorStore = generateEmbeddings(df, INDEX_NAME)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -19,24 +24,8 @@ def gita():
     data = request.json
     question = data.get("question")
     print(f"Question received: {question}")
-
     topDocs = retrieveRelevantDocs(question, vectorStore)
     verses = explainSelectedVerses(topDocs)
-
-    # verses = [
-    #     {
-    #         "verse_no": "2.47",
-    #         "sanskrit_text": "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन",
-    #         "translation": "You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions.",
-    #         "explanation": "This verse teaches the principle of detached action. Focus on your duty, not on the results."
-    #     },
-    #     {
-    #         "verse_no": "4.7",
-    #         "sanskrit_text": "यदा यदा हि धर्मस्य ग्लानिर्भवति भारत",
-    #         "translation": "Whenever there is a decline in righteousness, O Bharata, and a rise in unrighteousness, I manifest Myself.",
-    #         "explanation": "Krishna promises that He will incarnate to protect dharma whenever it is under threat."
-    #     }
-    # ]
 
     return jsonify({
         "verses": [
