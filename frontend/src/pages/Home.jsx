@@ -15,7 +15,7 @@ export default function Home() {
     setLoading(true);
     setResults(null);
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/gita`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/gita`, {
         question,
       });
       setResults(response.data);
